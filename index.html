@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Explorchestra</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #f3f4f6;
+
+            color: #222;
+        }
+
+
+        .container {
+
+            max-width: 1000px;
+
+            margin: 0 auto;
+
+            padding: 30px;
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            margin: 0 0 25px;
+
+            font-size: 32px;
+        }
+
+
+        /* =========================================
+           SONG SELECTOR
+        ========================================= */
+
+        .song-selector {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,.08);
+
+            text-align: center;
+        }
+
+
+        .song-selector label {
+
+            font-weight: 600;
+
+            margin-right: 10px;
+        }
+
+
+        #songSelect {
+
+            padding: 10px 15px;
+
+            font-size: 16px;
+
+            border-radius: 8px;
+
+            border: 1px solid #ccc;
+
+            background: white;
+
+            min-width: 220px;
+        }
+
+
+        #fileStatus {
+
+            margin-top: 12px;
+
+            color: #666;
+
+        }
+
+
+        /* =========================================
+           PLAYER
+        ========================================= */
+
+        .player {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,.08);
+
+            margin-bottom: 20px;
+        }
+
+
+        .transport {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        button {
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        .transport button {
+
+            padding: 10px 18px;
+
+            background: #333;
+
+            color: white;
+        }
+
+
+        .transport button:hover {
+
+            background: #555;
+
+        }
+
+
+        .transport .play {
+
+            font-size: 18px;
+
+            padding: 10px 25px;
+        }
+
+
+        .time {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #666;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        #progress {
+
+            width: 100%;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           MASTER
+        ========================================= */
+
+        .master {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #ddd;
+        }
+
+
+        .master label {
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        #masterVolume {
+
+            flex: 1;
+        }
+
+
+        /* =========================================
+           STEMS
+        ========================================= */
+
+        #stems {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .stem {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 12px 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                65px
+                minmax(160px, 1fr)
+                auto
+                auto
+                minmax(120px, 200px);
+
+            align-items: center;
+
+            gap: 15px;
+
+            box-shadow:
+                0 1px 5px rgba(0,0,0,.07);
+        }
+
+
+        /* =========================================
+           ICON
+        ========================================= */
+
+        .instrument-image {
+
+            width: 55px;
+
+            height: 55px;
+
+            object-fit: contain;
+
+            display: block;
+        }
+
+
+        .instrument-placeholder {
+
+            width: 55px;
+
+            height: 55px;
+        }
+
+
+        /* =========================================
+           NAME
+        ========================================= */
+
+        .stem-name {
+
+            font-weight: 600;
+
+            font-size: 17px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           BUTTONS
+        ========================================= */
+
+        .stem button {
+
+            padding: 8px 14px;
+
+            background: #ddd;
+
+            color: #222;
+        }
+
+
+        .stem button.active {
+
+            background: #333;
+
+            color: white;
+        }
+
+
+        .stem button.solo.active {
+
+            background: #777;
+
+            color: white;
+        }
+
+
+        /* =========================================
+           VOLUME
+        ========================================= */
+
+        .stem-volume {
+
+            width: 100%;
+        }
+
+
+        /* =========================================
+           EMPTY
+        ========================================= */
+
+        .empty {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            color: #777;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .container {
+
+                padding: 15px;
+
+            }
+
+
+            h1 {
+
+                font-size: 26px;
+
+            }
+
+
+            .stem {
+
+                grid-template-columns:
+                    55px
+                    1fr
+                    auto
+                    auto;
+
+            }
+
+
+            .stem-volume {
+
+                grid-column: 1 / -1;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>
+        🎼 Orchestra Explorer
+    </h1>
+
+
+
+    <!-- =========================================
+         SONG SELECTOR
+    ========================================== -->
+
+    <div class="song-selector">
+
+        <label for="songSelect">
+            Select a piece:
+        </label>
+
+
+        <select id="songSelect">
+
+            <option value="">
+                Select a piece...
+            </option>
+
+        </select>
+
+
+        <div id="fileStatus">
+
+            Select a piece to begin.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         PLAYER
+    ========================================== -->
+
+    <div class="player">
+
+
+        <div class="transport">
+
+
+            <button
+                onclick="stopPlayback()"
+            >
+                ■ Stop
+            </button>
+
+
+            <button
+                class="play"
+                id="playButton"
+                onclick="togglePlayback()"
+            >
+                ▶ Play
+            </button>
+
+
+            <button
+                onclick="resetMixer()"
+            >
+                ↺ Reset
+            </button>
+
+        </div>
+
+
+
+        <div class="time">
+
+            <span id="currentTime">
+                0:00
+            </span>
+
+
+            <span id="totalTime">
+                0:00
+            </span>
+
+        </div>
+
+
+
+        <input
+            type="range"
+            id="progress"
+            min="0"
+            max="1"
+            step="0.001"
+            value="0"
+        >
+
+
+
+        <div class="master">
+
+            <label>
+                Master
+            </label>
+
+
+            <input
+                type="range"
+                id="masterVolume"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1"
+            >
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         STEMS
+    ========================================== -->
+
+    <div id="stems">
+
+        <div class="empty">
+
+            Select a piece above.
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   INSTRUMENT ICON MATCHING
+   ========================================================= */
+
+
+const instrumentRules = [
+
+    {
+        words: [
+            "horns",
+            "french_horn",
+            "french horn",
+        ],
+
+        icon: "horn.png",
+
+        name: "French Horn"
+    },
+
+
+    {
+        words: [
+            "double-bass",
+            "double_bass",
+            "double bass",
+            "contrabass",
+            "bass"
+        ],
+
+        icon: "bass.png",
+
+        name: "Double Bass"
+    },
+    {
+        words: [
+            "timp",
+            "timpani"
+        ],
+
+        icon: "timpani.png",
+
+        name: "Timpani"
+    },
+
+
+    {
+        words: [
+            "violin",
+            "violins",
+            "vln"
+        ],
+
+        icon: "violin.png",
+
+        name: "Violin"
+    },
+
+
+    {
+        words: [
+            "viola",
+            "violas",
+            "vla"
+        ],
+
+        icon: "viola.png",
+
+        name: "Viola"
+    },
+
+
+    {
+        words: [
+            "cello",
+            "cellos",
+            "violoncello",
+            "vc"
+        ],
+
+        icon: "cello.png",
+
+        name: "Cello"
+    },
+
+
+    {
+        words: [
+            "bassoon",
+            "bassoons"
+        ],
+
+        icon: "bassoon.png",
+
+        name: "Bassoon"
+    },
+
+
+    {
+        words: [
+            "piccolo"
+        ],
+
+        icon: "flute.png",
+
+        name: "Piccolo"
+    },
+
+
+    {
+        words: [
+            "flute",
+            "flutes"
+        ],
+
+        icon: "flute.png",
+
+        name: "Flute"
+    },
+
+
+    {
+        words: [
+            "oboe",
+            "oboes"
+        ],
+
+        icon: "oboe.png",
+
+        name: "Oboe"
+    },
+
+
+    {
+        words: [
+            "clarinet",
+            "clarinets",
+            "clari"
+        ],
+
+        icon: "clarinet.png",
+
+        name: "Clarinet"
+    },
+
+
+    {
+        words: [
+            "trumpet",
+            "trumpets",
+            "tpt"
+        ],
+
+        icon: "trumpet.png",
+
+        name: "Trumpet"
+    },
+
+
+    {
+        words: [
+            "trombone",
+            "trombones",
+            "tbn"
+        ],
+
+        icon: "trombone.png",
+
+        name: "Trombone"
+    },
+
+
+    {
+        words: [
+            "tuba",
+            "tubas"
+        ],
+
+        icon: "tuba.png",
+
+        name: "Tuba"
+    },
+
+
+    {
+        words: [
+            "harp"
+        ],
+
+        icon: "harp.png",
+
+        name: "Harp"
+    },
+
+
+    {
+        words: [
+            "strings",
+            "string"
+        ],
+
+        icon: "strings.png",
+
+        name: "Strings"
+    },
+
+
+    {
+        words: [
+            "woodwinds",
+            "woodwind",
+            "winds",
+            "wind"
+        ],
+
+        icon: "woodwinds.png",
+
+        name: "Woodwinds"
+    },
+
+
+    {
+        words: [
+            "brass"
+        ],
+
+        icon: "brass.png",
+
+        name: "Brass"
+    },
+
+
+    {
+        words: [
+            "percussion",
+            "perc"
+        ],
+
+        icon: "percussion.png",
+
+        name: "Percussion"
+    }
+
+];
+
+
+
+/* =========================================================
+   FIND INSTRUMENT
+   ========================================================= */
+
+
+function findInstrument(filename) {
+
+
+    const name =
+        filename.toLowerCase();
+
+
+    for (const rule of instrumentRules) {
+
+
+        for (const word of rule.words) {
+
+
+            if (name.includes(word)) {
+
+                return rule;
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =========================================================
+   AUDIO STATE
+   ========================================================= */
+
+
+let audioContext = null;
+
+let masterGain = null;
+
+let stems = [];
+
+let isPlaying = false;
+
+let playbackStartTime = 0;
+
+let pausedAt = 0;
+
+let animationFrame = null;
+
+
+
+/* =========================================================
+   LOAD SONG LIST
+   ========================================================= */
+
+
+async function loadSongList() {
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "songs.json"
+            );
+
+
+        const songs =
+            await response.json();
+
+
+        const select =
+            document.getElementById(
+                "songSelect"
+            );
+
+
+        for (const songName in songs) {
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                songName;
+
+
+            option.textContent =
+                songName;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "Could not load songs.json:",
+            error
+        );
+
+
+        document
+            .getElementById("fileStatus")
+            .textContent =
+            "Could not load song list.";
+
+    }
+
+}
+
+
+
+loadSongList();
+
+
+
+/* =========================================================
+   SONG SELECTION
+   ========================================================= */
+
+
+document
+    .getElementById("songSelect")
+    .addEventListener(
+        "change",
+        loadSong
+    );
+
+
+
+/* =========================================================
+   LOAD SELECTED SONG
+   ========================================================= */
+
+
+async function loadSong() {
+
+
+    const songName =
+        document
+            .getElementById("songSelect")
+            .value;
+
+
+    if (!songName) {
+        return;
+    }
+
+
+    /*
+     * Read songs.json again so we know
+     * which files belong to this song.
+     */
+
+    const response =
+        await fetch(
+            "songs.json"
+        );
+
+
+    const songs =
+        await response.json();
+
+
+    const filenames =
+        songs[songName];
+
+
+    if (!filenames) {
+        return;
+    }
+
+
+
+    /*
+     * Create AudioContext.
+     */
+
+    if (!audioContext) {
+
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
+        masterGain =
+            audioContext.createGain();
+
+
+        masterGain.gain.value =
+            1;
+
+
+        masterGain.connect(
+            audioContext.destination
+        );
+
+    }
+
+
+
+    /*
+     * Stop previous song.
+     */
+
+    stopPlayback();
+
+
+    stems = [];
+
+
+    document
+        .getElementById("stems")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("fileStatus")
+        .textContent =
+        `Loading ${songName}...`;
+
+
+
+    /*
+     * Load every MP3.
+     */
+
+    for (const filename of filenames) {
+
+
+        try {
+
+
+            const url =
+                "music/" +
+                encodeURIComponent(
+                    songName
+                ) +
+                "/" +
+                encodeURIComponent(
+                    filename
+                );
+
+
+            const response =
+                await fetch(url);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
+            }
+
+
+            const arrayBuffer =
+                await response.arrayBuffer();
+
+
+            const audioBuffer =
+                await audioContext.decodeAudioData(
+                    arrayBuffer
+                );
+
+
+            /*
+             * Find icon based on filename.
+             */
+
+            const instrument =
+                findInstrument(
+                    filename
+                );
+
+
+            stems.push({
+
+                filename:
+                    filename,
+
+                name:
+                    instrument
+                        ? instrument.name
+                        : filename.replace(
+                            /\.[^/.]+$/,
+                            ""
+                        ),
+
+                icon:
+                    instrument
+                        ? "icons/" +
+                          instrument.icon
+                        : null,
+
+                buffer:
+                    audioBuffer,
+
+                volume:
+                    1,
+
+                enabled:
+                    true,
+
+                solo:
+                    false,
+
+                source:
+                    null,
+
+                gainNode:
+                    null,
+
+                toggleButton:
+                    null,
+
+                soloButton:
+                    null,
+
+                volumeControl:
+                    null
+
+            });
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                "Could not load:",
+                filename,
+                error
+            );
+
+        }
+
+    }
+
+
+
+    /*
+     * Sort instruments alphabetically.
+     */
+
+    stems.sort(
+        (a, b) =>
+            a.name.localeCompare(
+                b.name
+            )
+    );
+
+
+
+    /*
+     * Set duration.
+     */
+
+    if (stems.length) {
+
+
+        const duration =
+            stems[0]
+                .buffer
+                .duration;
+
+
+        document
+            .getElementById("totalTime")
+            .textContent =
+            formatTime(
+                duration
+            );
+
+
+        document
+            .getElementById("progress")
+            .max =
+            duration;
+
+
+    }
+
+
+    createStemControls();
+
+
+    document
+        .getElementById("fileStatus")
+        .textContent =
+        `${stems.length} stems loaded`;
+
+}
+
+
+
+/* =========================================================
+   CREATE STEM CONTROLS
+   ========================================================= */
+
+
+function createStemControls() {
+
+
+    const container =
+        document.getElementById(
+            "stems"
+        );
+
+
+    container.innerHTML = "";
+
+
+    stems.forEach(
+        (stem, index) => {
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "stem";
+
+
+
+            /*
+             * ICON
+             */
+
+            let image;
+
+
+            if (stem.icon) {
+
+
+                image =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                image.className =
+                    "instrument-image";
+
+
+                image.src =
+                    stem.icon;
+
+
+                image.alt =
+                    stem.name;
+
+
+                image.onerror =
+                    function() {
+
+                        this.style.display =
+                            "none";
+
+                    };
+
+            }
+
+            else {
+
+
+                image =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                image.className =
+                    "instrument-placeholder";
+
+            }
+
+
+
+            /*
+             * NAME
+             */
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "stem-name";
+
+
+            name.textContent =
+                stem.name;
+
+
+
+            /*
+             * ON/OFF
+             */
+
+            const toggle =
+                document.createElement(
+                    "button"
+                );
+
+
+            toggle.textContent =
+                "ON";
+
+
+            toggle.classList.add(
+                "active"
+            );
+
+
+            toggle.addEventListener(
+                "click",
+                () => {
+
+
+                    stem.enabled =
+                        !stem.enabled;
+
+
+                    updateStemButton(
+                        toggle,
+                        stem
+                    );
+
+
+                    updateStemVolume(
+                        index
+                    );
+
+                }
+            );
+
+
+
+            /*
+             * SOLO
+             */
+
+            const solo =
+                document.createElement(
+                    "button"
+                );
+
+
+            solo.textContent =
+                "Solo";
+
+
+            solo.classList.add(
+                "solo"
+            );
+
+
+            solo.addEventListener(
+                "click",
+                () => {
+
+
+                    stem.solo =
+                        !stem.solo;
+
+
+                    updateSoloButtons();
+
+
+                    updateAllStemVolumes();
+
+                }
+            );
+
+
+
+            /*
+             * VOLUME
+             */
+
+            const volume =
+                document.createElement(
+                    "input"
+                );
+
+
+            volume.type =
+                "range";
+
+
+            volume.min =
+                0;
+
+
+            volume.max =
+                1;
+
+
+            volume.step =
+                0.01;
+
+
+            volume.value =
+                1;
+
+
+            volume.className =
+                "stem-volume";
+
+
+            volume.addEventListener(
+                "input",
+                () => {
+
+
+                    stem.volume =
+                        parseFloat(
+                            volume.value
+                        );
+
+
+                    updateStemVolume(
+                        index
+                    );
+
+                }
+            );
+
+
+
+            /*
+             * BUILD ROW
+             */
+
+            row.appendChild(
+                image
+            );
+
+
+            row.appendChild(
+                name
+            );
+
+
+            row.appendChild(
+                toggle
+            );
+
+
+            row.appendChild(
+                solo
+            );
+
+
+            row.appendChild(
+                volume
+            );
+
+
+            container.appendChild(
+                row
+            );
+
+
+
+            stem.toggleButton =
+                toggle;
+
+
+            stem.soloButton =
+                solo;
+
+
+            stem.volumeControl =
+                volume;
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   PLAY / PAUSE
+   ========================================================= */
+
+
+async function togglePlayback() {
+
+
+    if (!stems.length) {
+        return;
+    }
+
+
+    if (isPlaying) {
+
+        pausePlayback();
+
+    }
+
+    else {
+
+        await startPlayback();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   START PLAYBACK
+   ========================================================= */
+
+
+async function startPlayback() {
+
+
+    if (!audioContext) {
+        return;
+    }
+
+
+    await audioContext.resume();
+
+
+    const duration =
+        stems[0]
+            .buffer
+            .duration;
+
+
+    if (pausedAt >= duration) {
+
+        pausedAt = 0;
+
+    }
+
+
+    /*
+     * All stems start at the exact
+     * same AudioContext time.
+     */
+
+    const startTime =
+        audioContext.currentTime +
+        0.05;
+
+
+
+    stems.forEach(
+        stem => {
+
+
+            const source =
+                audioContext
+                    .createBufferSource();
+
+
+            const gain =
+                audioContext
+                    .createGain();
+
+
+            source.buffer =
+                stem.buffer;
+
+
+            gain.gain.value =
+                getEffectiveVolume(
+                    stem
+                );
+
+
+            source.connect(
+                gain
+            );
+
+
+            gain.connect(
+                masterGain
+            );
+
+
+            source.start(
+                startTime,
+                pausedAt
+            );
+
+
+            stem.source =
+                source;
+
+
+            stem.gainNode =
+                gain;
+
+        }
+    );
+
+
+
+    playbackStartTime =
+        startTime -
+        pausedAt;
+
+
+    isPlaying =
+        true;
+
+
+    document
+        .getElementById("playButton")
+        .textContent =
+        "⏸ Pause";
+
+
+    updateProgress();
+
+}
+
+
+
+/* =========================================================
+   PAUSE
+   ========================================================= */
+
+
+function pausePlayback() {
+
+
+    if (!isPlaying) {
+        return;
+    }
+
+
+    pausedAt =
+        audioContext.currentTime -
+        playbackStartTime;
+
+
+    stopSources();
+
+
+    isPlaying =
+        false;
+
+
+    document
+        .getElementById("playButton")
+        .textContent =
+        "▶ Play";
+
+
+    updateProgress();
+
+}
+
+
+
+/* =========================================================
+   STOP
+   ========================================================= */
+
+
+function stopPlayback() {
+
+
+    stopSources();
+
+
+    isPlaying =
+        false;
+
+
+    pausedAt =
+        0;
+
+
+    document
+        .getElementById("playButton")
+        .textContent =
+        "▶ Play";
+
+
+    updateProgress();
+
+}
+
+
+
+/* =========================================================
+   STOP SOURCES
+   ========================================================= */
+
+
+function stopSources() {
+
+
+    stems.forEach(
+        stem => {
+
+
+            if (stem.source) {
+
+
+                try {
+
+                    stem.source.stop();
+
+                }
+
+                catch (e) {}
+
+            }
+
+
+            stem.source =
+                null;
+
+
+            stem.gainNode =
+                null;
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+
+function updateProgress() {
+
+
+    if (!stems.length) {
+        return;
+    }
+
+
+    let position;
+
+
+    if (isPlaying) {
+
+
+        position =
+            audioContext.currentTime -
+            playbackStartTime;
+
+    }
+
+    else {
+
+
+        position =
+            pausedAt;
+
+    }
+
+
+    const duration =
+        stems[0]
+            .buffer
+            .duration;
+
+
+    if (position >= duration) {
+
+
+        stopPlayback();
+
+
+        position = 0;
+
+    }
+
+
+
+    document
+        .getElementById("progress")
+        .value =
+        position;
+
+
+    document
+        .getElementById("currentTime")
+        .textContent =
+        formatTime(
+            position
+        );
+
+
+
+    if (isPlaying) {
+
+
+        animationFrame =
+            requestAnimationFrame(
+                updateProgress
+            );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SEEK
+   ========================================================= */
+
+
+document
+    .getElementById("progress")
+    .addEventListener(
+        "input",
+        function() {
+
+
+            const position =
+                parseFloat(
+                    this.value
+                );
+
+
+            if (isPlaying) {
+
+
+                stopSources();
+
+
+                pausedAt =
+                    position;
+
+
+                startPlayback();
+
+            }
+
+            else {
+
+
+                pausedAt =
+                    position;
+
+
+                updateProgress();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   EFFECTIVE VOLUME
+   ========================================================= */
+
+
+function getEffectiveVolume(stem) {
+
+
+    const anySolo =
+        stems.some(
+            s => s.solo
+        );
+
+
+    if (
+        anySolo &&
+        !stem.solo
+    ) {
+
+        return 0;
+
+    }
+
+
+    if (!stem.enabled) {
+
+        return 0;
+
+    }
+
+
+    return stem.volume;
+
+}
+
+
+
+/* =========================================================
+   UPDATE STEM VOLUME
+   ========================================================= */
+
+
+function updateStemVolume(index) {
+
+
+    const stem =
+        stems[index];
+
+
+    if (!stem.gainNode) {
+        return;
+    }
+
+
+    const volume =
+        getEffectiveVolume(
+            stem
+        );
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    stem.gainNode.gain
+        .cancelScheduledValues(
+            now
+        );
+
+
+    stem.gainNode.gain
+        .setTargetAtTime(
+            volume,
+            now,
+            0.015
+        );
+
+}
+
+
+
+/* =========================================================
+   UPDATE ALL STEM VOLUMES
+   ========================================================= */
+
+
+function updateAllStemVolumes() {
+
+
+    stems.forEach(
+        (_, index) =>
+            updateStemVolume(
+                index
+            )
+    );
+
+}
+
+
+
+/* =========================================================
+   RESET MIXER
+   ========================================================= */
+
+
+function resetMixer() {
+
+
+    stems.forEach(
+        stem => {
+
+
+            stem.enabled =
+                true;
+
+
+            stem.solo =
+                false;
+
+
+            stem.volume =
+                1;
+
+
+            if (
+                stem.volumeControl
+            ) {
+
+                stem.volumeControl.value =
+                    1;
+
+            }
+
+
+            if (
+                stem.toggleButton
+            ) {
+
+                updateStemButton(
+                    stem.toggleButton,
+                    stem
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Master volume
+     */
+
+    if (masterGain) {
+
+        masterGain.gain.value =
+            1;
+
+    }
+
+
+    document
+        .getElementById(
+            "masterVolume"
+        )
+        .value = 1;
+
+
+    updateSoloButtons();
+
+
+    updateAllStemVolumes();
+
+}
+
+
+
+/* =========================================================
+   BUTTON STATE
+   ========================================================= */
+
+
+function updateStemButton(
+    button,
+    stem
+) {
+
+
+    button.textContent =
+        stem.enabled
+            ? "ON"
+            : "OFF";
+
+
+    button.classList.toggle(
+        "active",
+        stem.enabled
+    );
+
+}
+
+
+
+/* =========================================================
+   SOLO BUTTONS
+   ========================================================= */
+
+
+function updateSoloButtons() {
+
+
+    stems.forEach(
+        stem => {
+
+
+            stem.soloButton
+                .classList.toggle(
+                    "active",
+                    stem.solo
+                );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   MASTER VOLUME
+   ========================================================= */
+
+
+document
+    .getElementById(
+        "masterVolume"
+    )
+    .addEventListener(
+        "input",
+        function() {
+
+
+            if (masterGain) {
+
+
+                masterGain.gain.value =
+                    parseFloat(
+                        this.value
+                    );
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   TIME FORMAT
+   ========================================================= */
+
+
+function formatTime(seconds) {
+
+
+    seconds =
+        Math.max(
+            0,
+            Math.floor(seconds)
+        );
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const secs =
+        seconds % 60;
+
+
+    return (
+        minutes +
+        ":" +
+        secs
+            .toString()
+            .padStart(
+                2,
+                "0"
+            )
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
