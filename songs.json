@@ -11,5 +11,19 @@
         "trumpets.mp3",
         "violas.mp3",
         "violins.mp3"
+    ],
+
+    "Pirates of the Caribbean":[
+        "percussion.mp3",
+        "bass.mp3",
+        "cello.mp3",
+        "choir.mp3",
+        "horns.mp3",
+        "timpani.mp3",
+        "trombones.mp3",
+        "trumpets.mp3",
+        "tuba.mp3",
+        "viola.mp3",
+        "violins.mp3"
     ]
 }
