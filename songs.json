@@ -13,7 +13,7 @@
         "violins.mp3"
     ],
 
-    "Pirates of the Caribbean":[
+    "Pirates of the Caribbean": [
         "percussion.mp3",
         "bass.mp3",
         "cello.mp3",
@@ -25,5 +25,16 @@
         "tuba.mp3",
         "viola.mp3",
         "violins.mp3"
+    ],
+
+    "Harry Potter": [
+        "Violins.mp3",
+        "Celesta.mp3",
+        "Cellos.mp3",
+        "Clarinet.mp3",
+        "Flute.mp3",
+        "Harp.mp3",
+        "Trombones.mp3",
+        "Trumpets.mp3"
     ]
 }
